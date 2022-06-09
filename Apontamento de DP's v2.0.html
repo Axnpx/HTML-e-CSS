@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desligamento programado</title>
+</head>
+
+<style>
+
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Elementos com o ID "titulo" */
+    legend {
+        font-family: sans-serif;
+        font-size: 17px;;
+        border: 1px solid;
+		padding: 6px;
+		text-align: center;
+		border-radius: 8px;
+        color: #0c0030;
+        background-color: azure;
+    } 
+
+     /* Configuração da caixa de dados para preenchimento*/
+    .caixa{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: rgba(208, 239, 247, 0.89);
+        padding-top: 15px;
+        padding-left: 35px;
+        padding-right: 35px;
+        padding-block-end: 35px;
+		border-radius: 15px;
+		width: 35%;
+		font-size: 13px;
+        width:400px
+		}
+
+     /* Configuração da caixa de de data*/
+    #dt_desligamento{
+		padding: 5px;
+		border-radius: 10px;
+		outline: none;
+        color: #0c0030;
+        border: 1px solid #17005a;
+        box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+		}
+
+    /*tamanho do input do campo*/
+    #matricula{
+        width:120px
+    }
+
+    /*tamanho do input do campo*/
+    #id{
+        width:60px
+    }
+
+    /*tamanho do input dos campos*/
+    #nota_sap, #num_doc{
+        width:130px
+    }
+
+    /*caracteristicas do campo*/
+    #operador{
+        width:150px;
+        padding: 0.2em;
+        border: 1px solid #17005a;
+        box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    }
+
+    /* Configuração os labels fora dos campos, que estao em formato diferente de block*/
+   label{
+        font-family: sans-serif;
+        font-size: 1em;
+        color: #0c0030;
+        border-radius: 5px;
+		}
+
+    /* Elementos de tag <fieldset>*/
+    fieldset {
+        border: 0;
+    }
+
+    /* Elemento de tag <body> */
+    body{
+        font-family: sans-serif;
+        font-size: 1em;
+        margin-left: 36%;
+        margin-top: 2%;
+        justify-content: center;
+        background-image: linear-gradient(to right, rgb(0, 81, 110), rgb(0, 47, 77));
+    }
+
+    /* Elementos de tags <body>, <input>, <Select>, <textarea> e <button> */
+    input, select, textarea, button {
+        font-family: sans-serif;
+        font-size: 1em;
+        color: #0c0030;
+        border-radius: 5px;
+        size: 15pt;
+    }
+
+    /* Elementos de classe "grupo" nos estados das pseudoclasses "before" e "after" */
+    .grupo:before, .grupo:after {
+        display: table;
+    }
+
+    /* Elementos de classe "grupo" no estado da pseudoclasse "after" */
+    .grupo:after {
+        clear: both;
+    }
+
+    /* Elementos de classe "campo" */
+    .campo {
+        margin-bottom: 1em;
+    }
+
+    /* Elementos de classe "campo" de tag <label> */
+        .campo label {
+        margin-bottom: 0.2em;
+        color: #0c0030;
+        display: block;
+    }
+
+    /* Elementos de classe "campo" ou "grupo" de tag <fieldset> */
+        fieldset.grupo .campo {
+        float:  left;
+        margin-right: 1em;
+    }
+
+    /* Elementos de classe "campo" das tags <input> com atributo text e email, da tag <select> e da tag <textarea>*/
+        .campo input[type="text"], .campo input[type="number"], .campo input[type="time"], .campo input[type="email"], .campo select, .campo textarea {
+        padding: 0.2em;
+        border: 1px solid #17005a;
+        box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+        display: block;
+    }
+
+    /* Elementos de classe "campo" de tag <select> e <option>*/
+        .campo select option {
+        padding-right: 1em;
+    }
+
+    /* Elemento de classe "campo" com tag <input>, <select> e <textarea> tocas com estado da pseudoclasse "focus"*/
+        .campo input:focus, .campo select:focus, .campo textarea:focus {
+        background: #E0E0F8;
+    }
+
+    /* Elemento de classe "botao" */
+    .botao {
+        font-size: 1em;
+        background: #0e32ff;
+        border: 0;
+        margin-bottom: 1em;
+        color: #ffffff;
+        padding: 0.4em 2em;
+        box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        position: absolute;
+    }
+
+    /* Elemento de classe "botao" com o estado da pseudoclasse "hover" */
+    .botao:hover {
+        background: #695eff;
+        box-shadow: inset 2px 2px 2px rgba(0,0,0,0.2);
+        text-shadow: none;
+    }
+
+    /* Elementos de classe botão e de tag <select> */
+    .botao, select{
+        cursor: pointer;
+    } 
+
+    @media(max-width: 727px){
+        .caixa{
+            width: 100%;
+        }
+    }
+
+</style>
+
+<body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+
+<div class="caixa">
+
+    <form action="https://sheetdb.io/api/v1/qcbr7abmgp8zc" method="POST" id="sheetdb-form">
+        <legend><b>Desligamentos programados</b></legend>
+        <br>
+
+        <div>
+            <label class="label"><strong>Situação do Desligamento:</strong></label>
+            <label>
+                <input type="radio" name="data[sit_dp]" value="executado" required>Executado
+            </label>
+            <label>
+                <input type="radio" name="data[sit_dp]" value="cancelado" required>Cancelado
+            </label>
+        </div>
+        <br>
+
+        <fieldset class="grupo">                
+            <div class="campo">
+                <label for="matricula"><strong>Matricula:</strong></label>
+                <input type="number" name="data[matricula]" id="matricula" required>
+            </div>
+ 
+            <div class="campo">
+                <label for="divisao"><strong>Divisão:</strong></label>
+                <select id="divisao" name="data[divisao]" >
+                    <option selected disable value="">Selecione</option>
+                    <option>SEDC</option>
+                    <option>SEDD</option>
+                    <option>SEDS</option>
+                    <option>SEDN</option>
+                </select>
+            </div>
+               
+            <div class="campo">
+                <label for="bop"><strong>Base Operacional:</strong></label>
+                <select id="bop" name="data[bop]" required>
+
+                    if ()
+
+                    <option>Selecione</option>
+                    <option>Campinas</option>
+                    <option>Jaguariúna</option>
+                    <option>Valinhos</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <fieldset class="grupo">
+            <div class="campo">
+                <label for="id"><strong>ID:</strong></label>
+                <input type="number" name="data[id]" id="id" class="inputUser" required>
+            </div>
+
+            <div class="campo">
+                <label for="nota_sap"><strong>Nota SAP:</strong></label>
+                <input type="number" name="data[nota_sap]" id="nota_sap" class="inputUser" required>
+            </div>
+	
+            <div class="campo">
+                <label for="num_doc"><strong>Número do documento:</strong></label>
+                <input type="text" name="data[num_doc]" id="num_doc" class="inputUser" required>
+            </div>
+        </fieldset>
+
+        <div class="label">
+            <label for="dt_desligamento"><b>Data do desligamento:</b></label>
+            <input type="date" name="data[dt_desligamento]" id="dt_desligamento" required>
+        </div>
+        <br>
+
+        <div class="label">
+            <label for="operador"><strong>Operador CO:</strong></label>
+            <input type="text" name="data[operador]" id="operador">
+        </div>
+        <br>
+
+        <fieldset class="grupo">
+            <div class="campo">
+                <label><strong>Início previsto:</strong></label>
+                <input type="time" name="data[inicio_prev]" id="previsto_abertura" required>
+            </div>
+            
+            <div class="campo">
+                <label><strong>Início real:</strong></label>
+                <input  type="time" name="data[inicio_real]" id="real_abertura" required>
+            </div>
+
+            <button onclick="operar_atraso_inicio()">testando</button>
+
+            <script>
+                function operar_atraso_inicio(){
+                    var previsto_abertura = document.getElementById('previsto_abertura').value;
+                    var real_abertura = document.getElementById('real_abertura').value;
+
+                    var hora_prevista_inicio = moment(previsto_abertura, "HH:mm")
+                    var hora_real_inicio = moment(real_abertura, "HH:mm")
+                    console.log (hora_real_inicio.diff(hora_prevista_inicio, "minutes"))
+
+                    //var hora_inicio = previsto_abertura.split (":")
+                    //var hora_real = real_abertura.split (":") 
+
+                    // var diferenca = moment(hora_inicio.diff(hora_real, "minutes"), "mm".format("HH:mm")
+                    // var data_inicio = new Date().setHours(hora_inicio[0], hora_inicio[1]);
+                    // var data_real = new Date().setHours(hora_real[0], hora_real[1]);
+                    // var milisegundos = (data_real - data_inicio)
+
+                    // var horas = (milisegundos/3600000).toFixed(0)
+                    // var minutos = ((milisegundos % 3600000)/60000).toFixed(0)
+
+                    // console.log (milisegundos, minutos)
+
+                    // var timer = real_abertura.value) - parseId(previsto_abertura.value)
+
+                    // alert(horas + ":" + minutos)
+                }
+            </script>
+        </fieldset>
+
+        <fieldset class="grupo">
+            <div class="campo">
+                <label><b>Fim previsto:</b></label>
+                <input type="time" name="data[fim_previsto]" id="previsto_fechamento" required>
+            </div>
+            
+            <div class="campo">
+                <label><b>Fim real:</b></label>
+                <input type="time" name="data[fim_real]" id="real_fechamento" required>
+            </div>
+        </fieldset>
+
+
+        <fieldset class="grupo">
+            <div class="campo">
+                <label for="tipo_atraso"><b>Tipo de atraso:</b></label>
+                <select id="tipo_atraso" name="data[tipo]" required>
+                    <option selected disable value="">Selecione</option>
+                    <option>Sem atraso</option>
+                    <option>Atraso início</option>
+                    <option>Atraso fim</option>
+                    <option>Atraso início e fim</option>
+                    <option disabled>DP cancelado</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="responsavel_atraso"><b>Responsável:</b></label>
+                <select id="responsavel_atraso" name="dara[responsável_atrso]" required> 
+                    <option selected disabled value="">Selecione</option>
+                    <option>Sem atraso</option>
+                    <option>Causas naturais</option>
+                    <option>CO</option>
+                    <option>Terceiros</option>
+                    <option>CPFL Serviços</option>
+                    <option>O&M</option>
+                    <option disabled>DP cancelado</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <div class="campo"> 
+            <label><strong>Descreva o que ocorreu no atraso:</strong></label>
+            <textarea row="10" style="width: 26em" id="descricao" name="data[detalhamento]"></textarea>
+        </div>
+
+        <button class="botao" type="submit">Enviar</button>
+
+    </form>
+
+    <script>
+        var form = document.getElementById('sheetdb-form');
+        form.addEventListener("submit", e => {
+          e.preventDefault();
+          fetch(form.action, {
+              method : "POST",
+              body: new FormData(document.getElementById("sheetdb-form")),
+          }).then(
+              response => response.json()
+          ).then((html) => {
+            // you can put any JS code here
+            alert('success')
+          });
+        });
+      </script>	
+
+</div>
+
+
+</body>
+</html>
